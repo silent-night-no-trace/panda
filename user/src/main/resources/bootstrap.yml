@@ -1,7 +1,7 @@
 server:
   port: 20080
   servlet:
-    context-path: user
+    context-path: /user
 
 spring:
   application:

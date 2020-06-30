@@ -67,6 +67,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
         <!-- gateway 基于webflux 不兼容web -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
