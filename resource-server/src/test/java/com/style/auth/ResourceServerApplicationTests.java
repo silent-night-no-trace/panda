@@ -1,10 +1,10 @@
-package com.style.order;
+package com.style.auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OrderApplicationTests {
+class ResourceServerApplicationTests {
 
 	@Test
 	void contextLoads() {
