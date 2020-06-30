@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: goods
+  autoconfigure:
+    exclude: org.springframework.cloud.consul.serviceregistry.ConsulAutoServiceRegistrationAutoConfiguration
+  # 暴露服务到admin-server
+#  boot:
+#    admin:
+#      client:
+#        #adminServer 地址
+#        url: http://localhost:20070
+
+#开启feign熔断
+feign:
+  hystrix:
+    enabled: true
+
+#默认暴露所有的节点给 adminServer 生产上谨慎使用 可增加认证
+management:
+  endpoints:
+    web:
+      exposure:
+        #暴露hystrix监控端点 hystrix.stream
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+
+# 添加开启admin的日志监控
+logging:
+  file:
+    name: goods.log

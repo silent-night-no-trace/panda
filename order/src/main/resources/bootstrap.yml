@@ -1,0 +1,69 @@
+server:
+  port: 20040
+
+spring:
+  application:
+    name: order
+  cloud:
+    zookeeper:
+      # zookeeper 服务发现与注册失效（默认）
+      enabled: false
+    consul:
+      # consul 服务发现与注册失效（默认）
+      enabled: false
+    #从配置中心加载远端配置
+#    config:
+#      uri: http://localhost:20060
+#      label: master
+#      profile: dev
+
+  profiles:
+    #切换不同 环境 使用zookeeper 或者consul
+    active: eureka
+
+
+
+eureka:
+  client:
+    # Eureka 服务发现与注册失效（默认）
+    enabled: false
+
+--- # Profile For Eureka
+spring:
+  profiles: eureka
+eureka:
+  server: # 官方不存在的配置（自定义配置）
+    host: 127.0.0.1
+    port: 20020
+  client:
+    service-url:
+      #注册中心地址
+      defaultZone: http://${eureka.server.host}:${eureka.server.port}/eureka
+    # 5 秒轮训一次
+    registryFetchIntervalSeconds: 5
+    enabled: true
+  instance:
+    # 10秒 发一次 心跳
+    leaseRenewalIntervalInSeconds: 10
+    metadata-map:
+      instanceId: ${spring.application.name}:${server.port}
+
+
+--- #zookeeper
+spring:
+  profiles: zookeeper
+  cloud:
+    zookeeper:
+      connectString: localhost:2181
+      enabled: true
+
+
+--- #consul
+spring:
+  profiles: consul
+  cloud:
+    consul:
+      discovery:
+        enabled: true
+        ipAddress: localhost
+        port: 8500

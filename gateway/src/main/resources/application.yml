@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: gateway
+  autoconfigure:
+    exclude: org.springframework.cloud.consul.serviceregistry.ConsulAutoServiceRegistrationAutoConfiguration
+  cloud:
+    gateway:
+      discovery:
+        locator:
+            # spring.cloud.gateway.discovery.locator.enabled为true，
+            # 表明gateway开启服务注册和发现的功能，并且spring cloud gateway
+            # 自动根据服务发现为每一个服务创建了一个router，这个router将以服务名
+            # 开头的请求路径转发到对应的服务。
+            # spring.cloud.gateway.discovery.locator.lowerCaseServiceId是将请求路径上的服务名
+            # 配置为小写（因为服务注册的时候，向注册中心注册时将服务名转成大写的了），
+            # 比如以/order/*的请求路径被路由转发到服务名为order的服务上。
+          enabled: false
+          lowerCaseServiceId: true
+      routes:
+        # 在上面的配置中，配置了一个Path 的predict,将以/order/**开头的请求都会转发到uri为lb://ORDER的地址上，
+        # lb://ORDER 即ORDER服务的负载均衡地址，并用StripPrefix的filter 在转发之前将/order去掉。
+        # 同时将spring.cloud.gateway.discovery.locator.enabled改为false，
+        # 如果不改的话，之前的localhost:8081/service-hi/hi?name=1323这样的请求地址也能正常访问，因为这时为每个服务创建了2个router。
+        - id: ORDER
+          uri: lb://ORDER
+          predicates:
+            - Path=/order/**
+          filters:
+            - StripPrefix=1
+  # zipkin-server 地址
+  zipkin:
+    base-url: http://localhost:9411/
+    #discovery-client-enabled: true
+  sleuth:
+    async:
+      enabled: true
+     # When true, generate 128-bit trace IDs instead of 64-bit ones.
+    traceId128: true
+    sampler:
+      #Sleuth的抽样收集概率
+      probability: 1.0
+

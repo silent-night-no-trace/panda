@@ -1,0 +1,18 @@
+server:
+  port: 20020
+
+spring:
+  application:
+    name: regisry
+
+eureka:
+  client:
+    ### 取消Eureka服务器自我注册
+    registerWithEureka: false
+    ### 注册中心的服务器，没有必要再去检索服务
+    fetchRegistry: false
+  instance:
+    hostname: localhost
+  server:
+    waitTimeInMsWhenSyncEmpty: 0
+

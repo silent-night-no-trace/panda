@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: adminServer
+  autoconfigure:
+    exclude: org.springframework.cloud.consul.serviceregistry.ConsulAutoServiceRegistrationAutoConfiguration
+
+
+
