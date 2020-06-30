@@ -9,17 +9,17 @@
 - config-server
   - spring cloud config
 - gateway
- - spring cloud gateway
+  - spring cloud gateway
 - goods 
- - 演示商品模块
+  - 演示商品模块
 - order 
- - 演示订单模块
+  - 演示订单模块
 - registry
- - spring cloud eureka 
+  - spring cloud eureka 
 - resource-server
- - oauth2.0 资源服务
+  - oauth2.0 资源服务
 - user
- - 演示用户模块
+  - 演示用户模块
  
 目前注册中心支持 eureka consul zookeeper 
 

@@ -6,6 +6,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
+ * Security配置
+ *
  * @author leon
  * @date 2020-06-18 15:23:04
  */
@@ -15,13 +17,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-			http.csrf().disable()
+		http.csrf().disable()
 				.authorizeRequests()
 				.antMatchers("/oauth/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
-					//表单登录
+				//表单登录
 				.formLogin()
-				;
+		;
 	}
 }

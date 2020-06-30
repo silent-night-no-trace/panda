@@ -12,14 +12,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.*;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
+ * Security 配置
+ *
  * @author leon
  * @date 2020-06-18 15:23:04
  */
@@ -30,61 +27,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-			http
+		http
 				.authorizeRequests()
 				.antMatchers(HttpMethod.OPTIONS).permitAll()
 				.antMatchers("/oauth/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
-					//basic 弹窗登录
-					//.httpBasic()
-					//表单登录
-					.formLogin()
-					.and()
+				//basic 弹窗登录
+				//.httpBasic()
+				//表单登录
+				.formLogin()
+				.and()
 				.csrf().disable()
-				;
+		;
 	}
 
 	@Bean
-	public UserDetailsService userDetails(){
+	public UserDetailsService userDetails() {
 		UserDetails admin = User.withUsername("admin")
+				//,默认BCryptPasswordEncoder 更多实现 org.springframework.security.crypto.password.PasswordEncoder
+				//可查看该接口的实现
+				// password  Spring Security 5.0开始必须以 {加密方式}+加密后的密码 这种格式填写
 				.password("{bcrypt}$2a$10$ZlFDDZMkZ9P7Yb4BsZ50ZueNzn7yM3GTJD97M5cJMWDu4oKr1Lsuq")
-				.roles("ADMIN","USER")
+				.roles("ADMIN", "USER")
 				.build();
 		UserDetails user = User.withUsername("user")
-				.password("{bcrypt}"+new BCryptPasswordEncoder().encode("123456"))
+				.password("{bcrypt}" + new BCryptPasswordEncoder().encode("123456"))
 				.roles("USER")
 				.build();
 		//内存用户管理器
-		//JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
 		InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
 		userDetailsManager.createUser(admin);
 		userDetailsManager.createUser(user);
 		return userDetailsManager;
 	}
 
-
 	@Bean
 	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
-	}
-
-//	@Bean
-//	public PasswordEncoder passwordEncoder() {
-//		return new DelegatingPasswordEncoder("noop",encoders);
-//	}
-
-	private static final Map<String,PasswordEncoder> encoders = new HashMap<>(4);
-
-	static {
-		encoders.put("bcrypt", new BCryptPasswordEncoder());
-		encoders.put("noop", NoOpPasswordEncoder.getInstance());
-		encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
-		encoders.put("scrypt", new SCryptPasswordEncoder());
-	}
-
-	public static void main(String[] args) {
-		System.out.println(new BCryptPasswordEncoder().encode("123456"));
 	}
 }

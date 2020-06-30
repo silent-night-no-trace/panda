@@ -60,7 +60,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		this.userDetailsService = userDetailsService;
 	}
 
-
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		//用来配置令牌端点(Token Endpoint)的安全与权限访问。
@@ -68,8 +67,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.tokenKeyAccess("permitAll()")
 				.checkTokenAccess("permitAll()")
 				.accessDeniedHandler(new AccessDeniedHandlerImpl())
+				//允许表单传入 client_id client_secret进行认证
 				.allowFormAuthenticationForClients()
-
 		;
 	}
 
@@ -121,27 +120,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		;
 	}
 
-
-	/**
-	 * Basic interface for determining whether a given client authentication request has been
-	 * approved by the current user.
-	 *
-	 * @return UserApprovalHandler
-	 */
-	@Bean
-	public UserApprovalHandler userApprovalHandler() {
-		TokenStoreUserApprovalHandler tokenStoreUserApprovalHandler = new TokenStoreUserApprovalHandler();
-		tokenStoreUserApprovalHandler.setClientDetailsService(clientDetailsService);
-		tokenStoreUserApprovalHandler.setTokenStore(tokenStore());
-		tokenStoreUserApprovalHandler.setRequestFactory(oAuth2RequestFactory());
-		return tokenStoreUserApprovalHandler;
-	}
-
-	@Bean
-	public OAuth2RequestFactory oAuth2RequestFactory() {
-		return new DefaultOAuth2RequestFactory(clientDetailsService);
-	}
-
 	/**
 	 * Persistence interface for OAuth2 tokens.
 	 *
@@ -149,59 +127,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	 */
 	@Bean
 	public TokenStore tokenStore() {
-//		JwtTokenStore tokenStore = new JwtTokenStore(accessTokenConverter());
-//		tokenStore.setApprovalStore(approvalStore());
-
 		return new InMemoryTokenStore();
 	}
 
-	/**
-	 * * Interface for saving, retrieving and revoking user approvals (per client, per scope).
-	 *
-	 * @return ApprovalStore
-	 */
-	@Bean
-	public ApprovalStore approvalStore() {
-		return new InMemoryApprovalStore();
-	}
-
-	/**
-	 * Helper that translates between JWT encoded token values and OAuth authentication
-	 * information (in both directions). Also acts as a {@link TokenEnhancer} when tokens are
-	 * granted.
-	 *
-	 * @return JwtAccessTokenConverter
-	 */
-	//@Bean
-	public JwtAccessTokenConverter accessTokenConverter() {
-		RsaSigner rsaSigner = new RsaSigner(KeyConfig.getSignerKey());
-		JwtAccessTokenConverter converter = new JwtAccessTokenConverter() {
-			private final JsonParser objectMapper = JsonParserFactory.create();
-
-			@Override
-			protected String encode(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-				String content;
-				try {
-					content = this.objectMapper.formatMap(getAccessTokenConverter().convertAccessToken(accessToken, authentication));
-				} catch (Exception ex) {
-					throw new IllegalStateException("Cannot convert access token to JSON", ex);
-				}
-				HashMap<String, String> headers = new HashMap<>(16);
-				headers.put("kid", KeyConfig.VERIFIER_KEY_ID);
-				return JwtHelper.encode(content, rsaSigner, headers).getEncoded();
-			}
-		};
-		converter.setSigner(rsaSigner);
-		converter.setVerifier(new RsaVerifier(KeyConfig.getVerifierKey()));
-		return converter;
-	}
-
-	@Bean
-	public JWKSet jwkSet() {
-		RSAKey.Builder builder = new RSAKey.Builder(KeyConfig.getVerifierKey())
-				.keyUse(KeyUse.SIGNATURE)
-				.algorithm(JWSAlgorithm.RS256)
-				.keyID(KeyConfig.VERIFIER_KEY_ID);
-		return new JWKSet(builder.build());
-	}
 }

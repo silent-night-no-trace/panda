@@ -1,6 +1,5 @@
 package com.style.config;
 
-import com.style.configserver.ConfigServerApplication;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
