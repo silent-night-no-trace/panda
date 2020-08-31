@@ -32,6 +32,8 @@
         <module>admin-server</module>
         <module>auth-server</module>
         <module>resource-server</module>
+        <module>stream</module>
+        <module>turbine-server</module>
         <module>user</module>
         <module>order</module>
         <module>goods</module>
@@ -56,6 +58,11 @@
             <artifactId>junit</artifactId>
             <version>4.13</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
         </dependency>
     </dependencies>
 
