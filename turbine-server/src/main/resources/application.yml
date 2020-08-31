@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: turbineServer
+  autoconfigure:
+    exclude: org.springframework.cloud.consul.serviceregistry.ConsulAutoServiceRegistrationAutoConfiguration
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: true
+
+turbine:
+  # 要监控的微服务列表，多个用,分隔
+  appConfig: order,goods,user
+  clusterNameExpression: "'default'"
+
+#默认暴露所有的节点给 adminServer 生产上谨慎使用 可增加认证
+management:
+  endpoints:
+    web:
+      exposure:
+        #暴露hystrix监控端点 hystrix.stream
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+
+# 添加开启admin的日志监控
+logging:
+  file:
+    name: trubine.log
