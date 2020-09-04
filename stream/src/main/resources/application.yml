@@ -1,0 +1,84 @@
+spring:
+  application:
+    name: stream
+  autoconfigure:
+    exclude: org.springframework.cloud.consul.serviceregistry.ConsulAutoServiceRegistrationAutoConfiguration
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: true
+    stream:
+      bindings:
+        output:
+          destination: test-topic
+          content-type: text/plain
+          binder: rabbit
+        input:
+          destination: test-topic
+          content-type: text/plain
+          binder: rabbit
+        outputOrder:
+          destination: testOrderMq
+          content-type: text/plain
+          binder: rabbit
+        inputOrder:
+          destination: testOrderMq
+          content-type: text/plain
+          binder: rabbit
+        groupOutput:
+          destination: testGroup
+          content-type: text/plain
+          binder: rabbit
+        groupInput:
+          destination: testGroup
+          content-type: text/plain
+          group: group-one
+          binder: rabbit
+        partitionOutput:
+          destination: testPartition
+          content-type: text/plain
+          producer:
+            partitionCount: 2
+            partitionKeyExpression: payload
+          binder: rabbit
+        partitionInput:
+          destination: testPartition
+          content-type: text/plain
+          group: partitionGroup
+          consumer:
+            partitioned: true
+            instanceIndex: 0
+            instanceCount: 2
+          binder: rabbit
+      binders:
+#        kafka:
+#          type: kafka
+#          environment:
+#            host: localhost
+#            topic: test-topic
+#            topicPattern: 1
+#            topicPartitions: 123
+        rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+
+#默认暴露所有的节点给 adminServer 生产上谨慎使用 可增加认证
+management:
+  endpoints:
+    web:
+      exposure:
+        #暴露hystrix监控端点 hystrix.stream
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+
+# 添加开启admin的日志监控
+logging:
+  file:
+    name: stream.log
