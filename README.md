@@ -8,6 +8,7 @@
   - oauth2.0 认证服务
 - config-server
   - spring cloud config
+  - support spring cloud bus 
 - gateway
   - spring cloud gateway
 - goods 
@@ -20,6 +21,10 @@
   - oauth2.0 资源服务
 - user
   - 演示用户模块
+- stream 
+  - use stream example
+- turbine-server 
+  - turbine    
  
 目前注册中心支持 eureka consul zookeeper 
 
