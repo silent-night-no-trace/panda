@@ -12,7 +12,7 @@ spring:
     sampler:
       #采样的百分比 测试环境配置为全部 线上需要注意
       probability: 1.0
-  # 暴露服务到admin-server
+  # 暴露服务到admin-server 需要启动 admin-server
   boot:
     admin:
       client:
