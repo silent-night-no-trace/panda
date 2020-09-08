@@ -1,4 +1,4 @@
-package com.style.auth;
+package com.style.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +16,6 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 @EnableDiscoveryClient
 @EnableHystrix
 @EnableHystrixDashboard
-@EnableCircuitBreaker
 public class UserApplication {
 
 	public static void main(String[] args) {

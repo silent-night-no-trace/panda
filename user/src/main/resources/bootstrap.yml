@@ -13,11 +13,6 @@ spring:
     consul:
       # consul 服务发现与注册失效（默认）
       enabled: false
-    #从配置中心加载远端配置
-#    config:
-#      uri: http://localhost:20060
-#      label: master
-#      profile: dev
 
   profiles:
     #切换不同 环境 使用zookeeper 或者consul

@@ -1,6 +1,5 @@
 package com.style.user;
 
-import com.style.auth.UserApplication;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
