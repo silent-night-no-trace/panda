@@ -27,16 +27,48 @@ spring:
             - Path=/order/**
           filters:
             - StripPrefix=1
-  # zipkin-server 地址
+        - id: goods
+          uri: http://127.0.0.1:20050
+          predicates:
+            - Path=/goods/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                # 使用SpEL从容器中获取对象
+                key-resolver: '#{@pathKeyResolver}'
+                # 令牌桶每秒填充平均速率
+                redis-rate-limiter.replenishRate: 1
+                X-RateLimit-Replenish-Rate: 1
+                X-RateLimit-Burst-Capacity: 3
+                # 令牌桶的总容量
+                redis-rate-limiter.burstCapacity: 3
+            - RewritePath=/goods/(?<segment>.*), /$\{segment}
+           # 配置转发路径去掉项目后缀 例如/goods/**  使用如下方式 或者 上面 RewritePath方式
+#          filters:
+#            - StripPrefix=1
+  #zipkin server地址
   zipkin:
-    base-url: http://localhost:9411/
-    #discovery-client-enabled: true
+    base-url: http://localhost:9411
+    sender:
+      #请求方式,默认以http的方式向zipkin server发送追踪数据
+      type: web
   sleuth:
     async:
       enabled: true
-     # When true, generate 128-bit trace IDs instead of 64-bit ones.
-    traceId128: true
     sampler:
-      #Sleuth的抽样收集概率
+      #采样的百分比 这些是全部采样 生产上看需求配置
       probability: 1.0
+
+  #redis 地址 显示 redis限流
+  redis:
+    port: 7001
+    host: localhost
+
+# 添加开启admin的日志监控
+logging:
+  level:
+    cn.itcast.order.fegin.ProductFeginClient: debug
+    root: INFO
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework.cloud.sleuth: DEBUG
 
