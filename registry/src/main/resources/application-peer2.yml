@@ -1,0 +1,15 @@
+server:
+  port: 20022
+
+spring:
+  application:
+    name: regisry2
+
+eureka:
+  client:
+    service-url:
+      #
+      defaultZone: http://localhost:20021/eureka,http://localhost:20023/eureka
+  instance:
+    hostname: localhost
+

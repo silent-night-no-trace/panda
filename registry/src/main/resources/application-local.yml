@@ -15,4 +15,8 @@ eureka:
     hostname: localhost
   server:
     waitTimeInMsWhenSyncEmpty: 0
+    #关闭自我保护
+    enableSelfPreservation: false
+    #剔除时间间隔,单位:毫秒
+    evictionIntervalTimerInMs: 4000
 
