@@ -1,23 +1,22 @@
 spring:
   application:
-    name: configServer
+    name: bus
   autoconfigure:
     exclude: org.springframework.cloud.consul.serviceregistry.ConsulAutoServiceRegistrationAutoConfiguration
+  cloud:
+    # bus 配置
+    bus:
+      enabled: true
+      trace:
+        enabled: true
   #mq 配置
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
-  #bus 的支持
-  cloud:
-    bus:
-      enabled: true
-      trace:
-        enabled: true
 
-
-#默认暴露所有的节点  生产上谨慎使用 可增加认证
+#默认暴露所有的节点给 adminServer 生产上谨慎使用 可增加认证
 management:
   endpoints:
     web:
@@ -27,3 +26,9 @@ management:
   endpoint:
     health:
       show-details: always
+
+
+# 添加开启admin的日志监控
+logging:
+  file:
+    name: bus.log

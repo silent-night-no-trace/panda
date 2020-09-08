@@ -34,6 +34,7 @@
         <module>resource-server</module>
         <module>stream</module>
         <module>turbine-server</module>
+        <module>bus</module>
         <module>user</module>
         <module>order</module>
         <module>goods</module>
