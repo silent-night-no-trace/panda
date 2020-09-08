@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @author leon
  * @date 2020-05-22 23:20:22
  */
-@FeignClient(value = "order")
+@FeignClient(value = "order" ,fallback = FeignCallBack.class)
 public interface OrderFeign {
 
 	/**

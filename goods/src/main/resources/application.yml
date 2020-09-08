@@ -3,17 +3,38 @@ spring:
     name: goods
   autoconfigure:
     exclude: org.springframework.cloud.consul.serviceregistry.ConsulAutoServiceRegistrationAutoConfiguration
+  zipkin:
+    base-url: http://localhost:9411
+    sender:
+      #请求方式,默认以http的方式向zipkin server发送追踪数据
+      type: web
+  sleuth:
+    sampler:
+      #采样的百分比 测试环境配置为全部 线上需要注意
+      probability: 1.0
   # 暴露服务到admin-server
-#  boot:
-#    admin:
-#      client:
-#        #adminServer 地址
-#        url: http://localhost:20070
+  boot:
+    admin:
+      client:
+        #adminServer 地址
+        url: http://localhost:20070
+
 
 #开启feign熔断
 feign:
   hystrix:
     enabled: true
+  compression:
+    request:
+      enabled: true # 开启请求压缩
+      # 设置压缩的数据类型
+      mime-types: text/html,application/xml,application/json
+      # 设置触发压缩的大小下限
+      min-request-size: 2048
+    response:
+      enabled: true # 开启响应压缩
+
+
 
 #默认暴露所有的节点给 adminServer 生产上谨慎使用 可增加认证
 management:
@@ -31,3 +52,9 @@ management:
 logging:
   file:
     name: goods.log
+  level:
+    cn.itcast.order.fegin.ProductFeginClient: debug
+    #sleuth 日志
+    root: INFO
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework.cloud.sleuth: DEBUG
