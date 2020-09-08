@@ -1,7 +1,6 @@
 package com.style.order;
 
 import org.junit.Ignore;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
