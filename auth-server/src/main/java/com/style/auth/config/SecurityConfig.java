@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
@@ -48,11 +49,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				//,默认BCryptPasswordEncoder 更多实现 org.springframework.security.crypto.password.PasswordEncoder
 				//可查看该接口的实现
 				// password  Spring Security 5.0开始必须以 {加密方式}+加密后的密码 这种格式填写
-				.password("{bcrypt}$2a$10$ZlFDDZMkZ9P7Yb4BsZ50ZueNzn7yM3GTJD97M5cJMWDu4oKr1Lsuq")
+				.password(new BCryptPasswordEncoder().encode("123456"))
 				.roles("ADMIN", "USER")
 				.build();
 		UserDetails user = User.withUsername("user")
-				.password("{bcrypt}" + new BCryptPasswordEncoder().encode("123456"))
+				.password(new BCryptPasswordEncoder().encode("123456"))
 				.roles("USER")
 				.build();
 		//内存用户管理器
@@ -67,4 +68,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
+
 }
